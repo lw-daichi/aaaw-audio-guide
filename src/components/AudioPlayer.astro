@@ -1,0 +1,14 @@
+---
+// 音声ガイド用の HTML5 プレーヤー。
+// preload="none" で、タップされるまで通信しません（会場の弱い回線対策）。
+interface Props {
+  src: string; // 再生する mp3 の URL（base 付与済み）
+}
+const { src } = Astro.props;
+---
+<div class="audio-block">
+  <audio controls preload="none" src={src}>
+    お使いのブラウザは音声再生に対応していません。
+  </audio>
+  <p class="audio-note">🎧 イヤホン・ヘッドホンでの再生がおすすめです。</p>
+</div>

@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import { getWorks } from '../lib/works.js';
+import { href } from '../lib/url.js';
+import { SITE_INTRO } from '../../site.config.mjs';
+
+const works = getWorks();
+---
+
+<Base>
+  <section class="intro">
+    <h1>作品を巡る、音声ガイド</h1>
+    <p>{SITE_INTRO}</p>
+  </section>
+
+  <ul class="grid">
+    {
+      works.map((work) => (
+        <li>
+          <a class="card" href={href(`works/${work.id}/`)}>
+            <img
+              class="card-thumb"
+              src={href(work.thumbnail)}
+              alt={`${work.title} のサムネイル`}
+              loading="lazy"
+              width="400"
+              height="300"
+            />
+            <div class="card-body">
+              <span class="card-num">No.{work.id}</span>
+              <p class="card-title">{work.title}</p>
+              <p class="card-artist">{work.artist}</p>
+            </div>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Base>

@@ -1,0 +1,41 @@
+---
+// YouTube 埋め込み（クリックで読み込む「ファサード」方式）。
+// 最初はサムネイル画像1枚だけ。タップして初めて重い YouTube プレーヤーを読み込むため、
+// 会場の弱い回線でもページが軽く開きます。プライバシー強化ドメインを使用。
+interface Props {
+  id: string; // YouTube 動画ID
+  title?: string;
+}
+const { id, title = '' } = Astro.props;
+const poster = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+---
+<div class="yt" data-yt-id={id}>
+  <button class="yt-btn" type="button" aria-label={`紹介ムービーを再生${title ? '：' + title : ''}`}>
+    <img src={poster} alt="" loading="lazy" width="480" height="360" />
+    <span class="yt-play" aria-hidden="true">▶</span>
+  </button>
+</div>
+
+<script>
+  // クリックされたら iframe を生成して差し替える。
+  document.querySelectorAll('.yt').forEach((el) => {
+    const btn = el.querySelector('.yt-btn');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const id = el.getAttribute('data-yt-id');
+      if (!id) return;
+      const iframe = document.createElement('iframe');
+      iframe.src =
+        `https://www.youtube-nocookie.com/embed/${id}` +
+        `?autoplay=1&rel=0&playsinline=1`;
+      iframe.title = 'YouTube 紹介ムービー';
+      iframe.setAttribute(
+        'allow',
+        'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
+      );
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.loading = 'lazy';
+      el.replaceChildren(iframe);
+    });
+  });
+</script>

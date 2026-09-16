@@ -1,0 +1,321 @@
+/* =====================================================================
+   グローバルスタイル
+   - モバイル第一・縦持ち前提
+   - ライト/ダーク自動対応（prefers-color-scheme）
+   - 大きめのタップ領域・読みやすい文字サイズ
+   ===================================================================== */
+
+:root {
+  color-scheme: light dark;
+
+  --bg: #fbfaf8;
+  --surface: #ffffff;
+  --text: #1b1b1a;
+  --text-muted: #5c5b58;
+  --border: #e6e3dd;
+  --accent: #b5451b;      /* 温かみのある赤茶（アイヌ文様を意識） */
+  --accent-text: #ffffff;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 6px 20px rgba(0, 0, 0, 0.05);
+  --radius: 14px;
+  --maxw: 720px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16150f;
+    --surface: #201e18;
+    --text: #f2efe9;
+    --text-muted: #b4b0a6;
+    --border: #33302a;
+    --accent: #e07a4b;
+    --accent-text: #1b1b1a;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Hiragino Kaku Gothic ProN",
+    "Hiragino Sans", "Noto Sans JP", Meiryo, sans-serif;
+  font-size: 17px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: var(--accent);
+}
+
+/* スキップリンク（アクセシビリティ） */
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--accent);
+  color: var(--accent-text);
+  padding: 10px 16px;
+  z-index: 100;
+}
+.skip:focus {
+  left: 8px;
+  top: 8px;
+  border-radius: 8px;
+}
+
+/* ---- ヘッダー / フッター ---- */
+.site-header {
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.site-title {
+  display: block;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 14px 20px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.container {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 24px 20px 64px;
+}
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 24px 20px 40px;
+}
+.site-footer p {
+  margin: 0;
+}
+
+/* ---- トップ：導入文 ---- */
+.intro {
+  margin: 4px 0 28px;
+  color: var(--text-muted);
+}
+.intro h1 {
+  color: var(--text);
+  font-size: 1.5rem;
+  line-height: 1.4;
+  margin: 0 0 12px;
+}
+
+/* ---- 作品グリッド ---- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+@media (min-width: 560px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow);
+  transition: transform 0.12s ease;
+}
+.card:active {
+  transform: scale(0.98);
+}
+.card-thumb {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  object-fit: cover;
+  background: var(--border);
+}
+.card-body {
+  padding: 10px 12px 14px;
+}
+.card-num {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+.card-title {
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 2px 0 2px;
+}
+.card-artist {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ---- 作品ページ ---- */
+.work-head {
+  margin-bottom: 18px;
+}
+.work-num {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+.work-title {
+  font-size: 1.7rem;
+  line-height: 1.3;
+  margin: 4px 0 4px;
+}
+.work-artist {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.section-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin: 28px 0 8px;
+}
+
+.work-desc {
+  white-space: pre-line;
+  margin: 8px 0 0;
+}
+
+/* ---- 前後の作品リンク ---- */
+.pager {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 40px;
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+.pager a,
+.pager span {
+  font-size: 0.9rem;
+  max-width: 46%;
+}
+.pager .next {
+  text-align: right;
+  margin-left: auto;
+}
+.pager .disabled {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+.back-home {
+  display: inline-block;
+  margin-top: 24px;
+  font-size: 0.9rem;
+}
+
+/* ---- 音声プレーヤー ---- */
+.audio-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+.audio-block audio {
+  width: 100%;
+  display: block;
+}
+.audio-note {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin: 10px 0 0;
+}
+
+/* ---- YouTube 埋め込み（クリックで読み込むファサード） ---- */
+.yt {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.yt iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+.yt-btn {
+  all: unset;
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.yt-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+}
+.yt-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  padding-left: 4px;
+  transition: background 0.15s ease;
+}
+.yt-btn:hover .yt-play,
+.yt-btn:focus-visible .yt-play {
+  background: var(--accent);
+}
+
+/* ---- about ページ ---- */
+.prose h2 {
+  font-size: 1.2rem;
+  margin: 28px 0 8px;
+}
+.prose p {
+  margin: 8px 0;
+}

@@ -1,0 +1,86 @@
+---
+import Base from '../../layouts/Base.astro';
+import AudioPlayer from '../../components/AudioPlayer.astro';
+import YouTubeEmbed from '../../components/YouTubeEmbed.astro';
+import { getWorks } from '../../lib/works.js';
+import { href } from '../../lib/url.js';
+
+// 各作品ページを静的生成。前後の作品も props で渡してツアー回遊を可能にする。
+export function getStaticPaths() {
+  const works = getWorks();
+  return works.map((work, i) => ({
+    params: { id: work.id },
+    props: {
+      work,
+      prev: works[i - 1] ?? null,
+      next: works[i + 1] ?? null,
+    },
+  }));
+}
+
+const { work, prev, next } = Astro.props;
+const audioSrc = work.audio ? href(work.audio) : '';
+const ogImage = work.thumbnail ? href(work.thumbnail) : undefined;
+---
+
+<Base title={work.title} description={`${work.artist}｜${work.title}`} image={ogImage}>
+  <div class="work-head">
+    <span class="work-num">No.{work.id}</span>
+    <h1 class="work-title">{work.title}</h1>
+    <p class="work-artist">{work.artist}</p>
+  </div>
+
+  {/* 音声ガイド（主動線。回線が弱くても軽く再生できる） */}
+  {
+    audioSrc && (
+      <>
+        <p class="section-label">音声ガイド</p>
+        <AudioPlayer src={audioSrc} />
+      </>
+    )
+  }
+
+  {/* 紹介ムービー（YouTube 限定公開。ある作品のみ） */}
+  {
+    work.youtube_id && (
+      <>
+        <p class="section-label">紹介ムービー</p>
+        <YouTubeEmbed id={work.youtube_id} title={work.title} />
+      </>
+    )
+  }
+
+  {/* 解説テキスト */}
+  {
+    work.description && (
+      <>
+        <p class="section-label">解説</p>
+        <p class="work-desc">{work.description}</p>
+      </>
+    )
+  }
+
+  {/* 前後の作品へ（ツアー的な回遊） */}
+  <nav class="pager" aria-label="作品の移動">
+    {
+      prev ? (
+        <a class="prev" href={href(`works/${prev.id}/`)}>
+          ← No.{prev.id} {prev.title}
+        </a>
+      ) : (
+        <span class="prev disabled">← 最初の作品です</span>
+      )
+    }
+    {
+      next ? (
+        <a class="next" href={href(`works/${next.id}/`)}>
+          No.{next.id} {next.title} →
+        </a>
+      ) : (
+        <span class="next disabled">最後の作品です →</span>
+      )
+    }
+  </nav>
+
+  <a class="back-home" href={href('')}>← 作品一覧へ戻る</a>
+</Base>

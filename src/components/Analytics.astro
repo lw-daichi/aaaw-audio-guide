@@ -1,0 +1,23 @@
+---
+// アクセス解析タグ（任意）。site.config.mjs でコード/トークンを入れると出力されます。
+// 空のままなら何も出力しません（＝軽量・プライバシー配慮のデフォルト）。
+import { GOATCOUNTER_CODE, CLOUDFLARE_ANALYTICS_TOKEN } from '../../site.config.mjs';
+---
+{
+  GOATCOUNTER_CODE && (
+    <script
+      data-goatcounter={`https://${GOATCOUNTER_CODE}.goatcounter.com/count`}
+      async
+      src="//gc.zgo.at/count.js"
+    />
+  )
+}
+{
+  CLOUDFLARE_ANALYTICS_TOKEN && (
+    <script
+      defer
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon={`{"token": "${CLOUDFLARE_ANALYTICS_TOKEN}"}`}
+    />
+  )
+}
