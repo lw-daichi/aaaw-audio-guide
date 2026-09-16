@@ -20,15 +20,39 @@ export function getStaticPaths() {
 
 const { work, prev, next } = Astro.props;
 const audioSrc = work.audio ? href(work.audio) : '';
-const ogImage = work.thumbnail ? href(work.thumbnail) : undefined;
+const thumbSrc = work.thumbnail ? href(work.thumbnail) : '';
+const ogImage = thumbSrc || undefined;
+// 作家表記：西田 香代子（刺繍作家）
+const artistLine = work.role ? `${work.artist}（${work.role}）` : work.artist;
+// 紹介ムービーが無い作品は、作品写真をヒーローとして大きく表示する
+const showPhoto = !work.youtube_id && thumbSrc;
 ---
 
-<Base title={work.title} description={`${work.artist}｜${work.title}`} image={ogImage}>
+<Base title={work.title} description={`${artistLine}｜${work.title}`} image={ogImage}>
   <div class="work-head">
     <span class="work-num">No.{work.id}</span>
     <h1 class="work-title">{work.title}</h1>
-    <p class="work-artist">{work.artist}</p>
+    {work.title_en && <p class="work-title-en">{work.title_en}</p>}
+    <p class="work-artist">
+      {artistLine}
+      {work.artist_en && <span class="work-artist-en">{work.artist_en}</span>}
+    </p>
+    {work.location && <p class="work-location">📍 {work.location}</p>}
   </div>
+
+  {/* 作品写真（紹介ムービーが無い作品のヒーロー） */}
+  {
+    showPhoto && (
+      <img
+        class="work-photo"
+        src={thumbSrc}
+        alt={`${work.title}（${work.artist}）`}
+        width="933"
+        height="1400"
+        loading="eager"
+      />
+    )
+  }
 
   {/* 音声ガイド（主動線。回線が弱くても軽く再生できる） */}
   {

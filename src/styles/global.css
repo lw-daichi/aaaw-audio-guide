@@ -261,12 +261,44 @@ button:focus-visible {
   font-size: 1.9rem;
   line-height: 1.35;
   letter-spacing: 0.02em;
-  margin: 14px 0 6px;
+  margin: 14px 0 2px;
   font-weight: 700;
 }
-.work-artist {
+.work-title-en {
+  font-family: "Outfit", sans-serif;
+  font-size: 0.95rem;
   color: var(--text-muted);
-  margin: 0;
+  letter-spacing: 0.06em;
+  margin: 0 0 8px;
+}
+.work-artist {
+  color: var(--text);
+  font-weight: 500;
+  margin: 6px 0 0;
+}
+.work-artist-en {
+  display: inline-block;
+  margin-left: 10px;
+  color: var(--text-muted);
+  font-family: "Outfit", sans-serif;
+  font-weight: 400;
+  font-size: 0.9rem;
+}
+.work-location {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 6px 0 0;
+}
+
+/* 作品写真（ヒーロー） */
+.work-photo {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 62vh;
+  margin: 22px auto 4px;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow);
 }
 
 /* セクション見出し（緑の四角マーカー付き） */

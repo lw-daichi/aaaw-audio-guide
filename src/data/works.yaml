@@ -6,24 +6,25 @@
 #     囲まないと 01 が数字の 1 として扱われ、URL が崩れます。
 #  ★ 画像・音声のパスは public/ フォルダからの相対パス（先頭スラッシュ無し）。
 #     例）thumbnail: images/01.jpg  →  public/images/01.jpg に置く
+#
+#  【任意項目】無ければ省略してOK
+#   artist_en … 作家名の英語表記（例 Kayoko Nishida）
+#   role      … 肩書き（例 刺繍作家）
+#   location  … 展示場所（例 コロポックル（アイヌコタン））
 # =====================================================================
 
 works:
   - id: "01"
-    title: 森のささやき
-    artist: 山田 花子
-    thumbnail: images/01.svg
-    youtube_id: dQw4w9WgXcQ        # ← 紹介ムービーの YouTube ID（限定公開）
-    audio: audio/01.mp3            # ← 音声ガイド mp3
-    description: |
-      森の奥で採取した環境音と、アイヌの伝統的な旋律を重ね合わせた音のインスタレーション。
-      風・水・鳥の声が少しずつ姿を変えながら、聴く人それぞれの記憶へと沈んでいきます。
-      （※これはサンプルの解説文です。実際の内容に差し替えてください。）
-    # 将来の多言語用（任意・未使用でもOK）
-    title_en: Whisper of the Forest
-    description_en: |
-      A sound installation layering field recordings from deep in the forest
-      with traditional Ainu melodies. (Sample text.)
+    title: ルウンペ
+    title_en: Ruunpe
+    artist: 西田 香代子
+    artist_en: Kayoko Nishida
+    role: 刺繍作家
+    location: コロポックル（アイヌコタン）
+    thumbnail: images/01.jpg
+    youtube_id: ""                 # ← 紹介ムービーができたら YouTube ID を入れる
+    audio: ""                      # ← 音声ガイドができたら mp3 パスを入れる
+    description: ""                # ← 解説文が決まったらここに入れる
 
   - id: "02"
     title: 波の記憶
