@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
-  <rect width="400" height="300" fill="#dedede"/>
-  <!-- ブランド緑のブロック -->
-  <rect x="0" y="0" width="120" height="10" fill="#79ff52"/>
-  <rect x="24" y="150" width="70" height="12" rx="3" fill="#79ff52"/>
-  <text x="24" y="66" font-family="Outfit, system-ui, sans-serif" font-size="30" font-weight="700" fill="#000">No.01</text>
-  <text x="24" y="210" font-family="'Zen Kaku Gothic New', system-ui, sans-serif" font-size="26" font-weight="700" fill="#000">森のささやき</text>
-  <text x="376" y="286" text-anchor="end" font-family="system-ui, sans-serif" font-size="12" fill="#666">サンプル画像</text>
-</svg>
