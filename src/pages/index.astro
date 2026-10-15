@@ -18,14 +18,22 @@ const works = getWorks();
       works.map((work) => (
         <li>
           <a class="card" href={href(`works/${work.id}/`)}>
-            <img
-              class="card-thumb"
-              src={href(work.thumbnail)}
-              alt={`${work.title} のサムネイル`}
-              loading="lazy"
-              width="400"
-              height="300"
-            />
+            {
+              work.thumbnail ? (
+                <img
+                  class="card-thumb"
+                  src={href(work.thumbnail)}
+                  alt={`${work.title} のサムネイル`}
+                  loading="lazy"
+                  width="400"
+                  height="300"
+                />
+              ) : (
+                <div class="card-thumb card-thumb--empty" aria-hidden="true">
+                  <span>No.{work.id}</span>
+                </div>
+              )
+            }
             <div class="card-body">
               <span class="card-num">No.{work.id}</span>
               <p class="card-title">{work.title}</p>
