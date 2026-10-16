@@ -100,18 +100,38 @@ button:focus-visible {
   border-bottom: 1px solid var(--border);
   background: var(--bg);
 }
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 12px 20px;
+}
 .site-title {
   display: flex;
   align-items: center;
   gap: 10px;
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 15px 20px;
   font-weight: 700;
   font-size: 1.02rem;
   letter-spacing: 0.04em;
   color: var(--text);
   text-decoration: none;
+}
+.header-link {
+  flex: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-ink);
+  background: var(--accent);
+  padding: 7px 12px;
+  border-radius: var(--radius-btn);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.header-link:hover {
+  background: var(--accent-deep);
 }
 /* タイトル前の緑マーク（ブランドの緑ブロック） */
 .site-title::before {
@@ -338,6 +358,14 @@ button:focus-visible {
 .work-desc {
   white-space: pre-line;
   margin: 8px 0 0;
+}
+/* 英語併記（日本語の下に少し間を空けて、やや控えめに） */
+.work-desc-en {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  color: var(--text-muted);
+  font-size: 0.95rem;
 }
 
 /* ---- 前後の作品リンク ---- */

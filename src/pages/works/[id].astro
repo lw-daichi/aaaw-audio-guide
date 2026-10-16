@@ -84,12 +84,13 @@ const showPhoto = !work.youtube_id && thumbSrc;
     )
   }
 
-  {/* 解説テキスト */}
+  {/* 解説テキスト（日本語の下に少し間を空けて英語を併記） */}
   {
     work.description && (
       <>
         <p class="section-label">解説</p>
         <p class="work-desc">{work.description}</p>
+        {work.description_en && <p class="work-desc work-desc-en">{work.description_en}</p>}
       </>
     )
   }

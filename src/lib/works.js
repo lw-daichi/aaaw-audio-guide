@@ -56,6 +56,10 @@ function loadOne(filename) {
   if (!id) return null;
   const raw = fs.readFileSync(path.join(CONTENT_DIR, filename), 'utf-8');
   const { data, body } = parseDoc(raw);
+  // 本文は「日本語 === 英語」の形式。=== が無ければ全部を日本語として扱う。
+  const parts = body.split(/\n[ \t]*={3,}[ \t]*\n/);
+  const description = (parts[0] || '').trim();
+  const description_en = (parts[1] || '').trim();
   return {
     id,
     title: str(data.title),
@@ -76,7 +80,8 @@ function loadOne(filename) {
       str(data.audio),
       str(data.audio_labels)
     ),
-    description: body,
+    description,
+    description_en,
   };
 }
 
