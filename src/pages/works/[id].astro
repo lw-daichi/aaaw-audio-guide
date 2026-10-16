@@ -55,12 +55,14 @@ const showPhoto = !work.youtube_id && thumbSrc;
   }
 
   {/* 音声ガイド（主動線。回線が弱くても軽く再生できる） */}
+  <p class="section-label">音声ガイド</p>
   {
-    audioSrc && (
-      <>
-        <p class="section-label">音声ガイド</p>
-        <AudioPlayer src={audioSrc} />
-      </>
+    audioSrc ? (
+      <AudioPlayer src={audioSrc} />
+    ) : (
+      <p class="audio-pending">
+        🎧 この作品の音声ガイドは準備中です。近日公開予定ですので、今しばらくお待ちください。
+      </p>
     )
   }
 
