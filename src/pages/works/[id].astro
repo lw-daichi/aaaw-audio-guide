@@ -60,7 +60,7 @@ const showPhoto = !work.youtube_id && thumbSrc;
         {audios.map((a, i) => (
           <div class={i > 0 ? 'audio-item audio-item--sep' : 'audio-item'}>
             {a.label && <p class="audio-label">{a.label}</p>}
-            <audio controls preload="none" src={a.src}>
+            <audio controls preload="metadata" src={a.src}>
               お使いのブラウザは音声再生に対応していません。
             </audio>
           </div>
