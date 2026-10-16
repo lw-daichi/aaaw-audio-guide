@@ -60,9 +60,22 @@ const showPhoto = !work.youtube_id && thumbSrc;
         {audios.map((a, i) => (
           <div class={i > 0 ? 'audio-item audio-item--sep' : 'audio-item'}>
             {a.label && <p class="audio-label">{a.label}</p>}
-            <audio controls preload="metadata" src={a.src}>
-              お使いのブラウザは音声再生に対応していません。
-            </audio>
+            <div class="player">
+              <audio class="player-audio" preload="metadata" src={a.src}></audio>
+              <div class="player-row">
+                <button type="button" class="player-play" aria-label="再生">
+                  <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+                  <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" /></svg>
+                  <span class="player-playlabel">再生</span>
+                </button>
+                <button type="button" class="player-stop" aria-label="停止">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" /></svg>
+                  <span>停止</span>
+                </button>
+              </div>
+              <input class="player-seek" type="range" min="0" max="100" value="0" step="0.1" aria-label="再生位置" />
+              <div class="player-time"><span class="player-cur">0:00</span> / <span class="player-dur">0:00</span></div>
+            </div>
           </div>
         ))}
         <p class="audio-note">🎧 イヤホン・ヘッドホンでの再生がおすすめです。</p>
@@ -130,3 +143,60 @@ const showPhoto = !work.youtube_id && thumbSrc;
 
   <a class="back-home" href={href('')}>← 作品一覧へ戻る</a>
 </Base>
+
+<script>
+  // カスタム音声プレーヤー：大きな「再生/一時停止」と「停止」ボタン・シーク・時間表示
+  const fmt = (s: number) => {
+    if (!isFinite(s) || s < 0) return '0:00';
+    const t = Math.floor(s);
+    return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`;
+  };
+  document.querySelectorAll<HTMLElement>('.player').forEach((player) => {
+    const audio = player.querySelector('audio') as HTMLAudioElement | null;
+    const playBtn = player.querySelector('.player-play') as HTMLButtonElement | null;
+    const stopBtn = player.querySelector('.player-stop') as HTMLButtonElement | null;
+    const seek = player.querySelector('.player-seek') as HTMLInputElement | null;
+    const cur = player.querySelector('.player-cur');
+    const dur = player.querySelector('.player-dur');
+    const label = player.querySelector('.player-playlabel');
+    if (!audio || !playBtn || !stopBtn || !seek) return;
+
+    const setDur = () => { if (dur) dur.textContent = fmt(audio.duration); };
+    if (audio.readyState >= 1) setDur();
+    audio.addEventListener('loadedmetadata', setDur);
+
+    playBtn.addEventListener('click', () => {
+      if (audio.paused) audio.play(); else audio.pause();
+    });
+    stopBtn.addEventListener('click', () => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
+
+    audio.addEventListener('play', () => {
+      // 同じページの他の音声は止める
+      document.querySelectorAll('audio').forEach((a) => { if (a !== audio) a.pause(); });
+      playBtn.classList.add('is-playing');
+      playBtn.setAttribute('aria-label', '一時停止');
+      if (label) label.textContent = '一時停止';
+    });
+    const toPaused = () => {
+      playBtn.classList.remove('is-playing');
+      playBtn.setAttribute('aria-label', '再生');
+      if (label) label.textContent = '再生';
+    };
+    audio.addEventListener('pause', toPaused);
+    audio.addEventListener('ended', () => {
+      toPaused();
+      if (cur) cur.textContent = '0:00';
+      seek.value = '0';
+    });
+    audio.addEventListener('timeupdate', () => {
+      if (cur) cur.textContent = fmt(audio.currentTime);
+      if (audio.duration) seek.value = String((audio.currentTime / audio.duration) * 100);
+    });
+    seek.addEventListener('input', () => {
+      if (audio.duration) audio.currentTime = (Number(seek.value) / 100) * audio.duration;
+    });
+  });
+</script>

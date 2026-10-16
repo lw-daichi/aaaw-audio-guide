@@ -426,10 +426,108 @@ button:focus-visible {
   padding: 18px;
   box-shadow: var(--shadow);
 }
-.audio-block audio {
-  width: 100%;
-  display: block;
+/* ---- カスタム音声プレーヤー（大きな再生/停止ボタン） ---- */
+.player-audio {
+  display: none; /* ネイティブUIは隠し、下のカスタムUIで操作 */
 }
+.player-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+.player-play,
+.player-stop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 60px;
+  border-radius: var(--radius-btn);
+  font-family: var(--font);
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+/* 再生/一時停止：大きな緑ボタン（主ボタン・横に広がる） */
+.player-play {
+  flex: 1 1 auto;
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: none;
+  font-size: 1.1rem;
+}
+.player-play:hover {
+  background: var(--accent-deep);
+}
+.player-play:active {
+  transform: scale(0.99);
+}
+/* 停止ボタン（副ボタン） */
+.player-stop {
+  flex: 0 0 auto;
+  padding: 0 22px;
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--border);
+  font-size: 1rem;
+}
+.player-stop:hover {
+  border-color: var(--text);
+}
+.player-play svg,
+.player-stop svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  flex: none;
+}
+.player-play .icon-pause {
+  display: none;
+}
+.player-play.is-playing .icon-play {
+  display: none;
+}
+.player-play.is-playing .icon-pause {
+  display: inline-block;
+}
+/* シークバー（タップしやすい大きめのつまみ） */
+.player-seek {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  margin: 18px 0 8px;
+  background: var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.player-seek::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--surface);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+.player-seek::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--surface);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+.player-time {
+  font-family: "Outfit", sans-serif;
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
 /* 複数音声（共作で話者が複数のとき） */
 .audio-item--sep {
   margin-top: 15px;
