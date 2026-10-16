@@ -1,6 +1,5 @@
 ---
 import Base from '../../layouts/Base.astro';
-import AudioPlayer from '../../components/AudioPlayer.astro';
 import YouTubeEmbed from '../../components/YouTubeEmbed.astro';
 import { getWorks } from '../../lib/works.js';
 import { href } from '../../lib/url.js';
@@ -19,7 +18,8 @@ export function getStaticPaths() {
 }
 
 const { work, prev, next } = Astro.props;
-const audioSrc = work.audio ? href(work.audio) : '';
+// 音声は複数可（共作で話者が複数のとき）。話者ラベル付き。
+const audios = (work.audios || []).map((a) => ({ src: href(a.src), label: a.label }));
 const thumbSrc = work.thumbnail ? href(work.thumbnail) : '';
 const ogImage = thumbSrc || undefined;
 // 作家表記：西田 香代子（刺繍作家）
@@ -47,8 +47,6 @@ const showPhoto = !work.youtube_id && thumbSrc;
         class="work-photo"
         src={thumbSrc}
         alt={`${work.title}（${work.artist}）`}
-        width="933"
-        height="1400"
         loading="eager"
       />
     )
@@ -57,8 +55,18 @@ const showPhoto = !work.youtube_id && thumbSrc;
   {/* 音声ガイド（主動線。回線が弱くても軽く再生できる） */}
   <p class="section-label">音声ガイド</p>
   {
-    audioSrc ? (
-      <AudioPlayer src={audioSrc} />
+    audios.length > 0 ? (
+      <div class="audio-block">
+        {audios.map((a, i) => (
+          <div class={i > 0 ? 'audio-item audio-item--sep' : 'audio-item'}>
+            {a.label && <p class="audio-label">{a.label}</p>}
+            <audio controls preload="none" src={a.src}>
+              お使いのブラウザは音声再生に対応していません。
+            </audio>
+          </div>
+        ))}
+        <p class="audio-note">🎧 イヤホン・ヘッドホンでの再生がおすすめです。</p>
+      </div>
     ) : (
       <p class="audio-pending">
         🎧 この作品の音声ガイドは準備中です。近日公開予定ですので、今しばらくお待ちください。

@@ -27,7 +27,7 @@ const AUDIO_EXTS = ['mp3', 'm4a', 'aac', 'ogg', 'wav'];
  * @property {string} location     展示場所（任意）
  * @property {string} youtube_id   紹介ムービーの YouTube ID（無ければ空）
  * @property {string} thumbnail    サムネイル画像パス（public からの相対・自動検出）
- * @property {string} audio        音声ガイドパス（public からの相対・自動検出）
+ * @property {{src:string,label:string}[]} audios  音声ガイド（複数可・話者ラベル付き）
  * @property {string} description  解説本文
  */
 
@@ -67,9 +67,60 @@ function loadOne(filename) {
     youtube_id: str(data.youtube_id),
     // frontmatter で明示指定があれば優先。無ければ番号で自動検出。
     thumbnail: str(data.thumbnail) || detectAsset(IMAGES_DIR, 'images', id, IMAGE_EXTS),
-    audio: str(data.audio) || detectAsset(AUDIO_DIR, 'audio', id, AUDIO_EXTS),
+    // 音声は複数可（共作で話者が複数のとき）。話者名は frontmatter の audio_labels で指定。
+    audios: detectAudios(
+      AUDIO_DIR,
+      'audio',
+      id,
+      AUDIO_EXTS,
+      str(data.audio),
+      str(data.audio_labels)
+    ),
     description: body,
   };
+}
+
+/**
+ * 音声ファイルを検出して [{src, label}] の配列で返す。
+ * - public/audio/NN.mp3            … 単独（ラベルなし）
+ * - public/audio/NN_1.mp3, NN_2... … 複数（共作など）。番号順に並ぶ
+ * 話者名は作品カルテの frontmatter `audio_labels: 名前1, 名前2`（カンマ区切り）で
+ * 上から順に対応づけ。ファイル名は半角英数字でOK（URLで安全）。
+ * @returns {{src:string,label:string}[]}
+ */
+function detectAudios(absDir, urlDir, id, exts, override, labelsRaw) {
+  const labels = String(labelsRaw || '')
+    .split(/[,、]/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+  // frontmatter で単独音声を明示している場合はそれを優先
+  if (override) return [{ src: override, label: labels[0] || '' }];
+
+  let files;
+  try {
+    files = fs.readdirSync(absDir);
+  } catch {
+    return [];
+  }
+  const matched = [];
+  const re = new RegExp(`^${id}(?:[_-](.+))?$`);
+  for (const f of files) {
+    const m = /^(.+)\.([a-z0-9]+)$/i.exec(f);
+    if (!m) continue;
+    const base = m[1];
+    const ext = m[2].toLowerCase();
+    if (!exts.includes(ext)) continue;
+    const mm = re.exec(base);
+    if (!mm) continue;
+    matched.push({ key: mm[1] || '', file: f });
+  }
+  // キー（_1, _2 …）の自然順で並べる
+  matched.sort((a, b) => a.key.localeCompare(b.key, 'en', { numeric: true }));
+  return matched.map((m, i) => ({
+    src: `${urlDir}/${m.file}`,
+    // ラベル優先順：frontmatter → ファイル名キー（数字のみは無視）
+    label: labels[i] || (m.key && !/^\d+$/.test(m.key) ? m.key : ''),
+  }));
 }
 
 /**

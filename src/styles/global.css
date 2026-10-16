@@ -394,6 +394,28 @@ button:focus-visible {
   width: 100%;
   display: block;
 }
+/* 複数音声（共作で話者が複数のとき） */
+.audio-item--sep {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid var(--line);
+}
+.audio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin: 0 0 8px;
+}
+.audio-label::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex: none;
+}
 .audio-note {
   font-size: 0.82rem;
   color: var(--text-muted);
