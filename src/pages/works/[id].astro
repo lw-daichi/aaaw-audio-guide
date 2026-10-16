@@ -90,7 +90,18 @@ const showPhoto = !work.youtube_id && thumbSrc;
       <>
         <p class="section-label">解説</p>
         <p class="work-desc">{work.description}</p>
-        {work.description_en && <p class="work-desc work-desc-en">{work.description_en}</p>}
+        {
+          work.description_en && (
+            <>
+              <p class="work-desc work-desc-en">{work.description_en}</p>
+              <p class="work-desc-note">
+                English translation is AI-generated for reference and is not an official
+                translation by the artist.<br />
+                英訳はAIによる参考翻訳です（誤りを含む場合があります）。アーティスト公式の翻訳ではありません。
+              </p>
+            </>
+          )
+        }
       </>
     )
   }

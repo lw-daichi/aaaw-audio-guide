@@ -367,6 +367,14 @@ button:focus-visible {
   color: var(--text-muted);
   font-size: 0.95rem;
 }
+/* 英訳の注記（AI翻訳である旨） */
+.work-desc-note {
+  margin: 10px 0 0;
+  font-size: 0.76rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  opacity: 0.85;
+}
 
 /* ---- 前後の作品リンク ---- */
 .pager {
