@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import Analytics from '../components/Analytics.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../site.config.mjs';
+import { SITE_TITLE, SITE_DESCRIPTION, GTM_CONTAINER_ID } from '../../site.config.mjs';
 import { href } from '../lib/url.js';
 
 interface Props {
@@ -14,6 +14,11 @@ const { title, description = SITE_DESCRIPTION, image } = Astro.props;
 const pageTitle = title ? `${title}｜${SITE_TITLE}` : SITE_TITLE;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image ? new URL(image, Astro.site) : undefined;
+
+// Google Tag Manager（設定時のみ出力）
+const gtmHead = GTM_CONTAINER_ID
+  ? `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${GTM_CONTAINER_ID}');`
+  : '';
 ---
 
 <!doctype html>
@@ -21,6 +26,8 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    {/* Google Tag Manager */}
+    {gtmHead && <script is:inline set:html={gtmHead} />}
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -46,6 +53,14 @@ const ogImage = image ? new URL(image, Astro.site) : undefined;
     <Analytics />
   </head>
   <body>
+    {/* Google Tag Manager (noscript) */}
+    {
+      GTM_CONTAINER_ID && (
+        <noscript
+          set:html={`<iframe src="https://www.googletagmanager.com/ns.html?id=${GTM_CONTAINER_ID}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`}
+        />
+      )
+    }
     <a class="skip" href="#main">本文へスキップ</a>
     <header class="site-header">
       <div class="header-inner">

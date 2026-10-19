@@ -60,7 +60,7 @@ const showPhoto = !work.youtube_id && thumbSrc;
         {audios.map((a, i) => (
           <div class={i > 0 ? 'audio-item audio-item--sep' : 'audio-item'}>
             {a.label && <p class="audio-label">{a.label}</p>}
-            <div class="player">
+            <div class="player" data-work-id={work.id} data-audio-label={a.label}>
               <audio class="player-audio" preload="metadata" src={a.src}></audio>
               <div class="player-row">
                 <button type="button" class="player-play" aria-label="再生">
@@ -173,12 +173,23 @@ const showPhoto = !work.youtube_id && thumbSrc;
       audio.currentTime = 0;
     });
 
+    let played = false;
     audio.addEventListener('play', () => {
       // 同じページの他の音声は止める
       document.querySelectorAll('audio').forEach((a) => { if (a !== audio) a.pause(); });
       playBtn.classList.add('is-playing');
       playBtn.setAttribute('aria-label', '一時停止');
       if (label) label.textContent = '一時停止';
+      // 計測：作品ごとの音声再生（GTM/GA4用のカスタムイベント）
+      if (!played) {
+        played = true;
+        (window as any).dataLayer = (window as any).dataLayer || [];
+        (window as any).dataLayer.push({
+          event: 'audio_play',
+          work_id: player.dataset.workId || '',
+          audio_label: player.dataset.audioLabel || '',
+        });
+      }
     });
     const toPaused = () => {
       playBtn.classList.remove('is-playing');

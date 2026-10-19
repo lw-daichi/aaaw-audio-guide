@@ -28,3 +28,7 @@ export const GOATCOUNTER_CODE = '';
 // Cloudflare Web Analytics を使う場合はトークンを入れてください（任意）。
 // 空文字なら出力されません。GoatCounter と併用も可能です。
 export const CLOUDFLARE_ANALYTICS_TOKEN = '';
+
+// Google Tag Manager のコンテナID（例 'GTM-XXXXXXX'）。
+// 空文字なら出力されません。※GTM管理画面側でGA4タグの設定・公開が別途必要です。
+export const GTM_CONTAINER_ID = 'GTM-PVFN4TWS';
