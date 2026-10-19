@@ -180,15 +180,20 @@ const showPhoto = !work.youtube_id && thumbSrc;
       playBtn.classList.add('is-playing');
       playBtn.setAttribute('aria-label', '一時停止');
       if (label) label.textContent = '一時停止';
-      // 計測：作品ごとの音声再生（GTM/GA4用のカスタムイベント）
+      // 計測：作品ごとの音声再生（GA4のカスタムイベント audio_play）
       if (!played) {
         played = true;
-        (window as any).dataLayer = (window as any).dataLayer || [];
-        (window as any).dataLayer.push({
-          event: 'audio_play',
+        const w = window as any;
+        const params = {
           work_id: player.dataset.workId || '',
           audio_label: player.dataset.audioLabel || '',
-        });
+        };
+        if (typeof w.gtag === 'function') {
+          w.gtag('event', 'audio_play', params);
+        } else {
+          w.dataLayer = w.dataLayer || [];
+          w.dataLayer.push({ event: 'audio_play', ...params });
+        }
       }
     });
     const toPaused = () => {

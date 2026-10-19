@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import Analytics from '../components/Analytics.astro';
-import { SITE_TITLE, SITE_DESCRIPTION, GTM_CONTAINER_ID } from '../../site.config.mjs';
+import { SITE_TITLE, SITE_DESCRIPTION, GTM_CONTAINER_ID, GA4_MEASUREMENT_ID } from '../../site.config.mjs';
 import { href } from '../lib/url.js';
 
 interface Props {
@@ -15,7 +15,12 @@ const pageTitle = title ? `${title}｜${SITE_TITLE}` : SITE_TITLE;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = image ? new URL(image, Astro.site) : undefined;
 
-// Google Tag Manager（設定時のみ出力）
+// Google アナリティクス4（gtag.js）。測定ID設定時のみ出力。
+const ga4Head = GA4_MEASUREMENT_ID
+  ? `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA4_MEASUREMENT_ID}');`
+  : '';
+
+// Google Tag Manager（設定時のみ出力。現在は未使用）
 const gtmHead = GTM_CONTAINER_ID
   ? `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${GTM_CONTAINER_ID}');`
   : '';
@@ -26,7 +31,14 @@ const gtmHead = GTM_CONTAINER_ID
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    {/* Google Tag Manager */}
+    {/* Google アナリティクス4（gtag.js） */}
+    {
+      GA4_MEASUREMENT_ID && (
+        <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${GA4_MEASUREMENT_ID}`} />
+      )
+    }
+    {ga4Head && <script is:inline set:html={ga4Head} />}
+    {/* Google Tag Manager（現在は未使用） */}
     {gtmHead && <script is:inline set:html={gtmHead} />}
     <title>{pageTitle}</title>
     <meta name="description" content={description} />

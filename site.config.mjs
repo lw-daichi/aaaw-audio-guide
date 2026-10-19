@@ -29,6 +29,11 @@ export const GOATCOUNTER_CODE = '';
 // 空文字なら出力されません。GoatCounter と併用も可能です。
 export const CLOUDFLARE_ANALYTICS_TOKEN = '';
 
+// Google アナリティクス4（GA4）の測定ID（例 'G-XXXXXXXXXX'）。
+// 空文字なら出力されません。これを入れると gtag.js を直接読み込みます。
+export const GA4_MEASUREMENT_ID = 'G-MEES3DD234';
+
 // Google Tag Manager のコンテナID（例 'GTM-XXXXXXX'）。
-// 空文字なら出力されません。※GTM管理画面側でGA4タグの設定・公開が別途必要です。
-export const GTM_CONTAINER_ID = 'GTM-PVFN4TWS';
+// ※現在は GA4 を直接埋め込んでいるため未使用（空文字＝出力しない）。
+//   GTM 経由にしたい場合はここにIDを入れ、GA4_MEASUREMENT_ID を空にする。
+export const GTM_CONTAINER_ID = '';
